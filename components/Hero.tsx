@@ -9,6 +9,13 @@ export default function Hero() {
   const t = useTranslations('hero');
   const lines = [t('lineOne'), t('lineTwo'), t('lineThree')];
 
+  function scrollTo(id: string) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({behavior: 'smooth'});
+    }
+  }
+
   return (
     <section className="page-shell flex min-h-screen flex-col justify-center pt-20">
       <motion.div
@@ -56,12 +63,13 @@ export default function Hero() {
       >
         <p className="max-w-[340px] text-[13px] leading-[1.7] text-[#888680]">{t('description')}</p>
         <div className="flex flex-wrap gap-3">
-          <a
-            href="#projects"
+          <button
+            type="button"
+            onClick={() => scrollTo('projects')}
             className="rounded-[4px] border-[1.5px] border-[#0f0f0d] bg-transparent px-5 py-2.5 text-[13px] text-[#0f0f0d] transition-all duration-200 hover:bg-[#0f0f0d] hover:text-[#f7f6f2]"
           >
             {t('viewProjects')}
-          </a>
+          </button>
           <a
             href="https://github.com/VaalaramaDev"
             target="_blank"

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import {usePathname} from 'next/navigation';
 import {useState} from 'react';
 import {motion, useMotionValueEvent, useScroll} from 'framer-motion';
 import {useTranslations} from 'next-intl';
@@ -14,8 +15,22 @@ const links = ['about', 'projects', 'skills', 'contact'] as const;
 
 export default function Nav({locale}: NavProps) {
   const t = useTranslations('nav');
+  const pathname = usePathname();
   const {scrollY} = useScroll();
   const [scrolled, setScrolled] = useState(false);
+
+  function scrollTo(id: string) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({behavior: 'smooth'});
+    }
+  }
+
+  function switchLocale(newLocale: string) {
+    const segments = pathname.split('/');
+    segments[1] = newLocale;
+    return segments.join('/') || '/';
+  }
 
   useMotionValueEvent(scrollY, 'change', (value) => {
     setScrolled(value > 12);
@@ -46,19 +61,24 @@ export default function Nav({locale}: NavProps) {
         <div className="flex items-center gap-6 text-[13px] text-[#888680]">
           <nav className="hidden items-center gap-6 md:flex">
             {links.map((link) => (
-              <a key={link} href={`/${locale}/#${link}`} className="transition-colors duration-200 hover:text-[#0f0f0d]">
+              <button
+                key={link}
+                type="button"
+                onClick={() => scrollTo(link)}
+                className="transition-colors duration-200 hover:text-[#0f0f0d]"
+              >
                 {t(link)}
-              </a>
+              </button>
             ))}
           </nav>
           <div className="flex items-center gap-1 text-[12px]">
-            <Link href="/en" className={locale === 'en' ? 'text-[#0f0f0d]' : 'transition-colors hover:text-[#0f0f0d]'}>
+            <a href={switchLocale('en')} className={locale === 'en' ? 'text-[#0f0f0d]' : 'text-[#888680]'}>
               EN
-            </Link>
+            </a>
             <span className="text-[#c5c2b8]">|</span>
-            <Link href="/ru" className={locale === 'ru' ? 'text-[#0f0f0d]' : 'transition-colors hover:text-[#0f0f0d]'}>
+            <a href={switchLocale('ru')} className={locale === 'ru' ? 'text-[#0f0f0d]' : 'text-[#888680]'}>
               RU
-            </Link>
+            </a>
           </div>
         </div>
       </div>
