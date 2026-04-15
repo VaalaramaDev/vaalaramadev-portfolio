@@ -1,0 +1,68 @@
+{
+  "nav": {
+    "about": "About",
+    "projects": "Projects",
+    "skills": "Skills",
+    "contact": "Contact"
+  },
+  "hero": {
+    "name": "Pavel Skvortsov",
+    "title": "Pavel Skvortsov",
+    "subtitle": "Full-Stack Developer & Automation Engineer",
+    "bio": "I build bots, APIs, and AI-powered tools.",
+    "status": "Open to new projects",
+    "eyebrow": "Full-Stack Developer & Automation Engineer",
+    "lineOne": "Building",
+    "lineTwo": "tools that",
+    "lineThree": "work.",
+    "description": "Automation, AI integrations, and backend systems. From Telegram bots to RAG pipelines - production-ready, every time.",
+    "viewProjects": "View projects",
+    "github": "GitHub"
+  },
+  "about": {
+    "title": "About",
+    "bio": "I'm a full-stack developer focused on automation, AI integrations, and backend systems. I build production-ready tools that solve real business problems - from Telegram bots to RAG pipelines.",
+    "location": "Yerevan, Armenia",
+    "timezone": "UTC+4",
+    "availability": "Open to new projects"
+  },
+  "projects": {
+    "title": "Projects",
+    "filter_all": "All",
+    "filter_telegram": "Telegram",
+    "filter_discord": "Discord",
+    "filter_ai": "AI",
+    "filter_integrations": "Integrations",
+    "filter_wordpress": "WordPress",
+    "viewProject": "View Project",
+    "related": "Related projects",
+    "screenshots": "Screenshots coming soon",
+    "back": "Projects"
+  },
+  "skills": {
+    "title": "Skills",
+    "languages": "Languages",
+    "backend": "Backend",
+    "frontend": "Frontend",
+    "databases": "Databases",
+    "aiMl": "AI/ML",
+    "botsAutomation": "Bots & Automation",
+    "devops": "DevOps",
+    "cms": "CMS"
+  },
+  "contact": {
+    "title": "Contact",
+    "github": "GitHub",
+    "telegram": "Telegram",
+    "location": "Location",
+    "emailTitle": "Send a message",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send"
+  },
+  "footer": {
+    "copyright": "© 2026 Pavel Skvortsov",
+    "builtWith": "Built with Next.js - Deployed on VPS"
+  }
+}

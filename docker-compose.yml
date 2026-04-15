@@ -1,0 +1,10 @@
+services:
+  portfolio:
+    build: .
+    container_name: vaalaramadev-portfolio
+    restart: unless-stopped
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+    ports:
+      - "3000:3000"

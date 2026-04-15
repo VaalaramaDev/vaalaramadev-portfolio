@@ -1,0 +1,100 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --background: #f7f6f2;
+  --surface: #f0efe9;
+  --border: #dddbd4;
+  --text-primary: #0f0f0d;
+  --text-secondary: #888680;
+  --text-muted: #c5c2b8;
+  --accent: #0f0f0d;
+  --max-width: 1100px;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #dddbd4 transparent;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: 'Satoshi', Inter, sans-serif;
+  text-rendering: optimizeLegibility;
+  isolation: auto !important;
+}
+
+#__next {
+  isolation: auto !important;
+}
+
+* {
+  border-color: var(--border);
+  cursor: none !important;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #dddbd4;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::selection {
+  background: #0f0f0d;
+  color: #f7f6f2;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.page-shell {
+  width: min(100% - 32px, var(--max-width));
+  margin-inline: auto;
+}
+
+.section-rule {
+  border-top: 0.5px solid var(--border);
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #b5b2a6;
+}
+
+.section-label::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 0.5px;
+  background: var(--border);
+}

@@ -1,0 +1,68 @@
+{
+  "nav": {
+    "about": "Обо мне",
+    "projects": "Проекты",
+    "skills": "Навыки",
+    "contact": "Контакты"
+  },
+  "hero": {
+    "name": "Павел Скворцов",
+    "title": "Павел Скворцов",
+    "subtitle": "Автоматизация, интеграции с искусственным интеллектом и серверные системы. От Telegram-ботов до интеллектуальных баз знаний - решения, готовые к работе.",
+    "bio": "Я создаю ботов, API и AI-инструменты.",
+    "status": "Открыт к новым проектам",
+    "eyebrow": "Full-Stack Developer & Automation Engineer",
+    "lineOne": "Создаю",
+    "lineTwo": "инструменты,",
+    "lineThree": "которые работают.",
+    "description": "Автоматизация, интеграции с искусственным интеллектом и серверные системы. От Telegram-ботов до интеллектуальных баз знаний - решения, готовые к работе.",
+    "viewProjects": "Смотреть проекты",
+    "github": "GitHub"
+  },
+  "about": {
+    "title": "Обо мне",
+    "bio": "Я Full-Stack разработчик, специализирующийся на автоматизации, ИИ-интеграциях и серверных системах. Создаю готовые к работе инструменты, которые решают реальные бизнес-задачи - от Telegram-ботов до интеллектуальных баз знаний.",
+    "location": "Ереван, Армения",
+    "timezone": "UTC+4",
+    "availability": "Открыт к новым проектам"
+  },
+  "projects": {
+    "title": "Проекты",
+    "filter_all": "Все",
+    "filter_telegram": "Telegram",
+    "filter_discord": "Discord",
+    "filter_ai": "AI",
+    "filter_integrations": "Интеграции",
+    "filter_wordpress": "WordPress",
+    "viewProject": "Открыть проект",
+    "related": "Похожие проекты",
+    "screenshots": "Скриншоты скоро появятся",
+    "back": "Проекты"
+  },
+  "skills": {
+    "title": "Навыки",
+    "languages": "Языки",
+    "backend": "Бэкенд",
+    "frontend": "Фронтенд",
+    "databases": "Базы данных",
+    "aiMl": "ИИ/ML",
+    "botsAutomation": "Боты и автоматизация",
+    "devops": "DevOps",
+    "cms": "CMS"
+  },
+  "contact": {
+    "title": "Контакты",
+    "github": "GitHub",
+    "telegram": "Telegram",
+    "location": "Локация",
+    "emailTitle": "Отправить сообщение",
+    "name": "Имя",
+    "email": "Email",
+    "message": "Сообщение",
+    "send": "Отправить"
+  },
+  "footer": {
+    "copyright": "© 2026 Павел Скворцов",
+    "builtWith": "Сделано на Next.js - Развернуто на VPS"
+  }
+}
