@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: 'Pavel Skvortsov | Full-Stack Developer',
   description: 'Portfolio of Pavel Skvortsov, a full-stack developer and automation engineer.',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/avatar.jpg'
+  },
   openGraph: {
     title: 'Pavel Skvortsov | Full-Stack Developer',
     description: 'Portfolio of Pavel Skvortsov, a full-stack developer and automation engineer.',

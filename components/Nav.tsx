@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 import {useState} from 'react';
@@ -52,9 +53,14 @@ export default function Nav({locale}: NavProps) {
     >
       <div className="page-shell flex h-full items-center justify-between">
         <Link href={`/${locale}`} className="flex items-center gap-3 text-[13px] font-medium text-[#0f0f0d]">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#dddbd4] bg-[#f0efe9] text-[11px]">
-            PS
-          </span>
+          <Image
+            src="/avatar.jpg"
+            alt="Pavel Skvortsov"
+            width={36}
+            height={36}
+            className="rounded-full object-cover"
+            style={{width: 36, height: 36}}
+          />
           <span>Pavel Skvortsov</span>
         </Link>
 
