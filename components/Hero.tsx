@@ -17,9 +17,9 @@ export default function Hero() {
   }
 
   return (
-    <section className="page-shell flex min-h-screen flex-col justify-center pt-20">
+    <section className="page-shell flex min-h-[calc(100svh-56px)] flex-col justify-center py-24 md:min-h-screen md:pt-20 md:pb-0">
       <motion.div
-        initial={{opacity: 0, y: 200}}
+        initial={{opacity: 0, y: 60}}
         animate={{opacity: 1, y: 0}}
         transition={{duration: 0.7, delay: 0.1, ease}}
         className="inline-flex w-fit items-center gap-2 rounded-[20px] border border-[#c5d9c5] bg-[#eef4ee] px-3 py-2 text-[11px] text-[#5a7a5a]"
@@ -29,7 +29,7 @@ export default function Hero() {
       </motion.div>
 
       <motion.div
-        initial={{opacity: 0, y: 200}}
+        initial={{opacity: 0, y: 60}}
         animate={{opacity: 1, y: 0}}
         transition={{duration: 0.7, delay: 0.2, ease}}
         className="section-label mt-10"
@@ -41,7 +41,7 @@ export default function Hero() {
         {lines.map((line, index) => (
           <div key={line} className="overflow-hidden">
             <motion.h1
-              initial={{y: 400, opacity: 0}}
+              initial={{y: 80, opacity: 0}}
               animate={{y: 0, opacity: 1}}
               transition={{duration: 0.8, delay: 0.3 + index * 0.1, ease}}
               className={`text-[clamp(52px,8vw,96px)] font-medium leading-none tracking-[-0.04em] ${
@@ -56,7 +56,7 @@ export default function Hero() {
       </div>
 
       <motion.div
-        initial={{opacity: 0, y: 200}}
+        initial={{opacity: 0, y: 60}}
         animate={{opacity: 1, y: 0}}
         transition={{duration: 0.7, delay: 0.8, ease}}
         className="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between"

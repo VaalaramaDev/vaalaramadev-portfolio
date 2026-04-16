@@ -12,9 +12,9 @@ export default function About() {
     <section id="about" className="section-rule py-20">
       <div className="page-shell grid gap-10 md:grid-cols-[60%_40%]">
         <motion.div
-          initial={{x: -300, opacity: 0}}
+          initial={{x: -80, opacity: 0}}
           whileInView={{x: 0, opacity: 1}}
-          viewport={{once: true, amount: 0.3}}
+          viewport={{once: true, amount: 0.1}}
           transition={{duration: 0.7, delay: 0.1, ease}}
         >
           <div className="section-label">{t('title')}</div>
@@ -22,9 +22,9 @@ export default function About() {
         </motion.div>
 
         <motion.div
-          initial={{x: 300, opacity: 0}}
+          initial={{x: 80, opacity: 0}}
           whileInView={{x: 0, opacity: 1}}
-          viewport={{once: true, amount: 0.3}}
+          viewport={{once: true, amount: 0.1}}
           transition={{duration: 0.7, delay: 0.1, ease}}
           className="flex flex-col gap-4"
         >
