@@ -1281,22 +1281,368 @@ saveBtn.addEventListener('click', function () {
   {
     slug: 'wp-ai-seo',
     title: 'WP Plugin - AI SEO Generator',
-    description: 'WordPress plugin that auto-generates SEO meta titles and descriptions for posts using OpenAI',
+    description:
+      'A custom WordPress admin plugin that generates 7 SEO fields per ASIC miner product via GPT-4o: Rank Math title, meta description, verdict block, and 3 key advantages, with bulk generation and sequential progress UI.',
     descriptionRu: 'Плагин WordPress для автоматической генерации SEO-заголовков и описаний к записям с помощью OpenAI',
     stack: ['WordPress', 'PHP', 'OpenAI API'],
     github: 'https://github.com/VaalaramaDev',
     category: 'wordpress',
-    num: '12'
+    num: '12',
+    screenshots: ['admin'],
+    details: {
+      hook: 'One click fills SEO title, meta description, verdict, and 3 advantages for every product in the catalog.',
+      metrics: [
+        {value: '7', label: 'fields generated per product'},
+        {value: 'GPT-4o', label: 'model - not mini, quality matters for SEO'},
+        {value: 'sequential', label: 'bulk mode - one request at a time, with progress bar'},
+        {value: 'SOCKS5', label: 'proxy support for VPS with blocked OpenAI access'}
+      ],
+      screenshots: ['admin'],
+      pipeline: [
+        'Admin page',
+        'Collect ACF fields',
+        'Build prompt',
+        'GPT-4o -> JSON',
+        'Parse + validate',
+        'update_field + Rank Math meta'
+      ],
+      features: [
+        'Admin table shows all miner products with "filled / empty" status per field',
+        '"Generate all" button processes only incomplete products - skips already filled',
+        'Sequential queue - one AJAX request at a time, progress bar + live log in console style',
+        'Per-product "Generate" button for individual regeneration',
+        'GPT-4o returns strict JSON with 7 fields: seo_title, seo_description, verdict_title, verdict_text, adv_1, adv_2, adv_3',
+        'JSON parser handles both clean JSON and markdown code blocks (```json ... ```)',
+        'Saves to ACF fields (verdict, advantages) + Rank Math post_meta (title, description)',
+        'API key stored as PHP constant MS_OPENAI_KEY in wp-config.php - never in DB or code',
+        'SOCKS5 proxy support via constants - works on VPS where OpenAI blocks direct requests'
+      ],
+      codeSnippet: `// System prompt - forbids inventing numbers, mentioning competitors, using template phrases
+$system = 'You are an SEO copywriter for MasterSatoshi ASIC miner store.
+Write only based on the provided data. Do not invent numbers, do not mention competitors.
+Use keywords organically - they must carry meaning, not be stuffed artificially.';
+
+// User prompt - strict JSON schema with per-field requirements
+$user = "Product data:\\n{$data_block}\\n
+Return ONLY valid JSON without explanation:\\n
+{
+  \\"seo_title\\": \\"up to 70 chars. Format: Brand Model TH/s - buy | MasterSatoshi\\",
+  \\"seo_description\\": \\"120-140 chars. Hashrate, algorithm, shipping. No price.\\",
+  \\"verdict_title\\": \\"MASTERSATOSHI VERDICT: Brand Model\\",
+  \\"verdict_text\\": \\"120-150 words. Algorithm, hashrate, conditions, final assessment.\\",
+  \\"adv_1\\": \\"specific advantage with actual figures from data\\",
+  \\"adv_2\\": \\"...\\",
+  \\"adv_3\\": \\"...\\"
+}";
+
+// After GPT responds - validate all 7 keys before saving anything
+$required = ['seo_title','seo_description','verdict_title','verdict_text','adv_1','adv_2','adv_3'];
+foreach ($required as $key) {
+    if (!isset($parsed[$key]) || !is_string($parsed[$key])) {
+        wp_send_json(['success' => false, 'error' => 'Missing field: ' . $key]);
+    }
+}
+// Save to ACF fields + Rank Math post_meta
+update_field('verdict_text', $verdict_text, $post_id);
+update_post_meta($post_id, 'rank_math_title', $seo_title);
+update_post_meta($post_id, 'rank_math_description', $seo_description);`,
+      codeSnippetLang: 'php',
+      highlight:
+        'The prompt forbids the model from inventing numbers, mentioning competitors, or using template phrases. Every advantage must contain actual figures from the product data - hashrate, J/TH, wattage - making the output verifiable and SEO-useful.',
+      architecture: [
+        {path: 'inc/seo-ai-generator.php', desc: 'admin page, AJAX handler, OpenAI call via cURL, JSON parser'},
+        {
+          path: 'ms2026_seo_ai_collect_miner_data()',
+          desc: 'reads ACF fields: brand, model, hashrate, power, efficiency, price, condition, noise, temp'
+        },
+        {
+          path: 'ms2026_seo_ai_call_openai()',
+          desc: 'cURL to OpenAI with optional SOCKS5 proxy - handles HTTP errors and curl errors separately'
+        },
+        {
+          path: 'ms2026_seo_ai_parse_json_from_response()',
+          desc: 'strips markdown code fences, falls back to extracting {} block if needed'
+        },
+        {
+          path: 'Sequential JS queue',
+          desc: 'generates one product at a time - avoids OpenAI rate limits, shows live progress bar + log'
+        }
+      ]
+    },
+    detailsRu: {
+      hook: 'Один клик заполняет SEO title, meta description, вердикт и 3 преимущества для каждого товара в каталоге.',
+      metrics: [
+        {value: '7', label: 'полей генерируется на каждый товар'},
+        {value: 'GPT-4o', label: 'модель - не mini, качество важно для SEO'},
+        {value: 'последовательно', label: 'массовый режим - по одному запросу с прогресс-баром'},
+        {value: 'SOCKS5', label: 'прокси для VPS с заблокированным доступом к OpenAI'}
+      ],
+      screenshots: ['admin'],
+      pipeline: [
+        'Страница админки',
+        'Сбор ACF полей',
+        'Построение промпта',
+        'GPT-4o -> JSON',
+        'Парсинг + валидация',
+        'update_field + Rank Math meta'
+      ],
+      features: [
+        'Таблица в админке показывает все товары со статусом "заполнен / пусто" по каждому полю',
+        'Кнопка "Сгенерировать всё" обрабатывает только незаполненные товары - уже готовые пропускает',
+        'Последовательная очередь - один AJAX-запрос за раз, прогресс-бар + лог в стиле консоли',
+        'Кнопка "Сгенерировать" на каждый товар для индивидуальной перегенерации',
+        'GPT-4o возвращает строгий JSON с 7 полями: seo_title, seo_description, verdict_title, verdict_text, adv_1, adv_2, adv_3',
+        'Парсер JSON обрабатывает и чистый JSON, и markdown-блоки (```json ... ```)',
+        'Сохраняет в ACF поля (вердикт, преимущества) + Rank Math post_meta (title, description)',
+        'API ключ хранится как PHP константа MS_OPENAI_KEY в wp-config.php - не в БД и не в коде',
+        'Поддержка SOCKS5 прокси через константы - работает на VPS где OpenAI блокирует прямые запросы'
+      ],
+      codeSnippet: `// Системный промпт - запрещает модели выдумывать и использовать шаблоны
+$system = 'Ты опытный SEO-копирайтер для интернет-магазина ASIC-майнеров MasterSatoshi.
+Пиши только на основе переданных данных. Не выдумывай цифры, не упоминай конкурентов.
+Ключевые слова используй органично - они должны быть частью смысла, а не вставлены искусственно.';
+
+// Пользовательский промпт - строгая JSON-схема с требованиями к каждому полю
+$user = "Данные о товаре:\\n{$data_block}\\n
+Верни ТОЛЬКО валидный JSON без пояснений:\\n
+{
+  \\"seo_title\\": \\"до 70 символов. Формат: Бренд Модель TH/s - купить | MasterSatoshi\\",
+  \\"seo_description\\": \\"120-140 символов. Хешрейт, алгоритм, доставка по России. Без цены.\\",
+  \\"verdict_title\\": \\"MASTERSATOSHI VERDICT: Бренд Модель\\",
+  \\"verdict_text\\": \\"120-150 слов. Алгоритм, хешрейт, условия, итоговая оценка.\\",
+  \\"adv_1\\": \\"конкретное преимущество с цифрами из данных\\",
+  \\"adv_2\\": \\"...\\",
+  \\"adv_3\\": \\"...\\"
+}";
+
+// После ответа GPT - валидация всех 7 ключей перед сохранением
+$required = ['seo_title','seo_description','verdict_title','verdict_text','adv_1','adv_2','adv_3'];
+foreach ($required as $key) {
+    if (!isset($parsed[$key]) || !is_string($parsed[$key])) {
+        wp_send_json(['success' => false, 'error' => 'Отсутствует поле: ' . $key]);
+    }
+}
+// Сохранение в ACF + Rank Math
+update_field('verdict_text', $verdict_text, $post_id);
+update_post_meta($post_id, 'rank_math_title', $seo_title);
+update_post_meta($post_id, 'rank_math_description', $seo_description);`,
+      codeSnippetLang: 'php',
+      highlight:
+        'Промпт запрещает модели выдумывать цифры, упоминать конкурентов и использовать шаблонные фразы. Каждое преимущество должно содержать реальные данные из карточки товара - хешрейт, J/TH, мощность.',
+      architecture: [
+        {path: 'inc/seo-ai-generator.php', desc: 'страница, AJAX-хендлер, вызов OpenAI через cURL, парсер JSON'},
+        {
+          path: 'ms2026_seo_ai_collect_miner_data()',
+          desc: 'считывает ACF поля: бренд, модель, хешрейт, мощность, эффективность, цена, состояние, шум, температура'
+        },
+        {
+          path: 'ms2026_seo_ai_call_openai()',
+          desc: 'cURL к OpenAI с опциональным SOCKS5 прокси - раздельная обработка HTTP-ошибок и curl-ошибок'
+        },
+        {
+          path: 'ms2026_seo_ai_parse_json_from_response()',
+          desc: 'удаляет markdown-теги, при необходимости извлекает блок {} из текста'
+        },
+        {
+          path: 'Последовательная JS очередь',
+          desc: 'генерирует по одному товару - не превышает rate limit OpenAI, показывает прогресс-бар и лог'
+        }
+      ]
+    }
   },
   {
     slug: 'wp-hot-offers',
     title: 'WP Block - Hot Offers',
-    description: 'Gutenberg block that pulls latest posts from a Telegram channel and displays them as hot offers',
+    description:
+      'A two-part WordPress feature: an infinite CSS marquee carousel of top-performing miners, and a Telegram webhook that automatically parses price lists from a channel and updates product prices in the catalog.',
     descriptionRu: 'Блок Gutenberg, подгружающий последние посты из Telegram-канала и отображающий их как горячие предложения',
     stack: ['WordPress', 'Gutenberg', 'React', 'Telegram API', 'PHP'],
     github: 'https://github.com/VaalaramaDev',
     category: 'wordpress',
-    num: '13'
+    num: '13',
+    screenshots: [],
+    details: {
+      hook: 'The manager posts a price list in Telegram. The catalog updates itself.',
+      metrics: [
+        {value: 'CSS', label: 'marquee - no JS animation, pure keyframes'},
+        {value: 'webhook', label: 'Telegram - WordPress REST API - ACF update'},
+        {value: '2%', label: 'hashrate matching tolerance for price slot lookup'},
+        {value: '4', label: 'fallback states: updated - new hashrate - slots full - not found'}
+      ],
+      screenshots: [],
+      pipeline: [
+        'Telegram channel post',
+        'Webhook - /wp-json/ms/v1/tg-webhook',
+        'Secret token validation',
+        'Parse price lines (regex)',
+        'Normalize model names',
+        'Match - update_field()',
+        'Report back to Telegram'
+      ],
+      features: [
+        'Hot Deals carousel: selects top miners by daily income - up to 2 "Новинка" badges + top by ROI',
+        'Cards triplicated in PHP for seamless CSS loop - no JS cloning required',
+        'Animation speed calculated dynamically: card_count - (280px + 24px gap) - 60px/s',
+        'Pause on hover via CSS animation-play-state, respects prefers-reduced-motion',
+        'Telegram webhook receives channel_post events via REST API endpoint',
+        'Secret token validated with hash_equals() - constant-time comparison, timing-attack safe',
+        'Price message detection: starts with 🔵, contains "в наличии РФ"',
+        'Regex parser extracts model name, hashrate (TH/GH/kSol/MH normalized to TH), price in USDT',
+        'Model name normalization: lowercase, strip "бу", expand "+", add spaces before suffixes (pro/hydro/mini)',
+        'Hashrate slot matching with 2% tolerance - finds correct H1H4 slot per product',
+        'Unmatched prices stored in ms2026_pending_prices option for manual review',
+        'Report sent back to Telegram: updated / new hashrate variant / slots full / not found in catalog',
+        'Fallback: if webhook transient is empty, scrapes t.me/s/channel HTML for last 5 posts'
+      ],
+      codeSnippet: `// Price message detection + line parser
+function ms2026_is_price_message(string $text): bool {
+    return mb_strpos($text, '🔵') === 0
+        && mb_strpos($text, 'в наличии РФ') !== false;
+}
+
+// Each line:  ModelName 100TH  1500 USDT
+preg_match(
+    '/\\s*(бу\\s+)?(.+?)\\s+([\\d,\\.]+)\\s*(Mh|Th|TH|GH|kSol)\\s*[-]\\s*([\\d\\s,\\.]+)\\s*USDT/iu',
+    $line, $m
+);
+
+// Normalize model name for fuzzy matching
+function ms2026_normalize_name(string $name): string {
+    $name = mb_strtolower(trim($name));
+    $name = preg_replace('/^бу\\s+/u', '', $name);
+    $name = str_replace('+', 'plus', $name);
+    foreach (['hydro','pro','mini','home','plus'] as $suffix) {
+        $name = preg_replace('/\\s*'.$suffix.'\\s*/u', ' '.$suffix.' ', $name);
+    }
+    return trim(preg_replace('/\\s+/', ' ', $name));
+}
+
+// Match hashrate with 2% tolerance across H1H4 slots
+for ($i = 1; $i <= 4; $i++) {
+    $slot_th = get_field('h'.$i.'_th', $pid);
+    $diff = abs((float)$slot_th - $parsed['hashrate']);
+    if ($diff <= $parsed['hashrate'] * 0.02) {
+        update_field('h'.$i.'_price', $parsed['price'], $pid);
+        break;
+    }
+}`,
+      codeSnippetLang: 'php',
+      highlight:
+        'When a price line cannot be matched - new hashrate variant or product not yet in catalog - it is stored in a pending_prices option for manual review. The manager gets an itemized Telegram report: what was updated, what needs attention, and which products have not had prices updated in 14+ days.',
+      architecture: [
+        {
+          path: 'parts/hot-deals.php',
+          desc: 'queries miners, scores by daily income, selects top 4, triples array for CSS loop'
+        },
+        {
+          path: 'inc/tg-channel.php',
+          desc: 'REST webhook handler, price parser, normalizer, slot matcher, report sender'
+        },
+        {
+          path: 'POST /wp-json/ms/v1/tg-webhook',
+          desc: 'receives Telegram channel_post, validates secret, routes: price message vs regular post'
+        },
+        {
+          path: 'GET /wp-json/ms/v1/tg-posts',
+          desc: 'returns last 5 channel posts from transient, falls back to scraping t.me/s/channel'
+        },
+        {
+          path: 'ms2026_pending_prices option',
+          desc: 'stores unmatched price lines for manual review - new hashrate variants and unknown models'
+        }
+      ]
+    },
+    detailsRu: {
+      hook: 'Менеджер постит прайс в Telegram. Каталог обновляется сам.',
+      metrics: [
+        {value: 'CSS', label: 'marquee - без JS анимации, чистые keyframes'},
+        {value: 'webhook', label: 'Telegram - WordPress REST API - обновление ACF'},
+        {value: '2%', label: 'допуск совпадения хешрейта при поиске слота'},
+        {value: '4', label: 'состояния: обновлено - новый хешрейт - слоты заняты - не найдено'}
+      ],
+      screenshots: [],
+      pipeline: [
+        'Пост в Telegram-канале',
+        'Webhook - /wp-json/ms/v1/tg-webhook',
+        'Валидация секрет-токена',
+        'Парсинг строк прайса (regex)',
+        'Нормализация названий',
+        'Совпадение - update_field()',
+        'Отчёт обратно в Telegram'
+      ],
+      features: [
+        'Карусель Hot Deals: выбирает топ-майнеры по суточному доходу - до 2 с плашкой "Новинка" + топ по ROI',
+        'Карточки утраиваются в PHP для бесшовной CSS-петли - клонирование через JS не требуется',
+        'Скорость анимации считается динамически: кол-во карточек - (280px + 24px gap) - 60px/с',
+        'Пауза при hover через CSS animation-play-state, учитывает prefers-reduced-motion',
+        'Telegram webhook принимает channel_post через REST API эндпоинт',
+        'Секрет-токен проверяется через hash_equals() - защита от timing-атак',
+        'Определение прайса: начинается с 🔵, содержит "в наличии РФ"',
+        'Regex-парсер извлекает название, хешрейт (TH/GH/kSol/MH нормализуется в TH), цену в USDT',
+        'Нормализация названий: нижний регистр, убрать "бу", развернуть "+", пробелы перед суффиксами',
+        'Совпадение слота хешрейта с допуском 2% - находит правильный H1H4 слот товара',
+        'Несовпавшие цены сохраняются в опцию ms2026_pending_prices для ручной проверки',
+        'Отчёт отправляется обратно в Telegram: обновлено / новый вариант / слоты заняты / не найдено',
+        'Fallback: если transient пуст, парсит HTML t.me/s/channel и берёт последние 5 постов'
+      ],
+      codeSnippet: `// Определение прайса + парсер строк
+function ms2026_is_price_message(string $text): bool {
+    return mb_strpos($text, '🔵') === 0
+        && mb_strpos($text, 'в наличии РФ') !== false;
+}
+
+// Каждая строка:  НазваниеМодели 100TH  1500 USDT
+preg_match(
+    '/\\s*(бу\\s+)?(.+?)\\s+([\\d,\\.]+)\\s*(Mh|Th|TH|GH|kSol)\\s*[-]\\s*([\\d\\s,\\.]+)\\s*USDT/iu',
+    $line, $m
+);
+
+// Нормализация названия для нечёткого совпадения
+function ms2026_normalize_name(string $name): string {
+    $name = mb_strtolower(trim($name));
+    $name = preg_replace('/^бу\\s+/u', '', $name);
+    $name = str_replace('+', 'plus', $name);
+    foreach (['hydro','pro','mini','home','plus'] as $suffix) {
+        $name = preg_replace('/\\s*'.$suffix.'\\s*/u', ' '.$suffix.' ', $name);
+    }
+    return trim(preg_replace('/\\s+/', ' ', $name));
+}
+
+// Совпадение хешрейта с допуском 2% по слотам H1H4
+for ($i = 1; $i <= 4; $i++) {
+    $slot_th = get_field('h'.$i.'_th', $pid);
+    $diff = abs((float)$slot_th - $parsed['hashrate']);
+    if ($diff <= $parsed['hashrate'] * 0.02) {
+        update_field('h'.$i.'_price', $parsed['price'], $pid);
+        break;
+    }
+}`,
+      codeSnippetLang: 'php',
+      highlight:
+        'Когда строка прайса не совпадает - новый вариант хешрейта или товар не в каталоге - она сохраняется в опцию pending_prices для ручной проверки. Менеджер получает подробный Telegram-отчёт: что обновлено, что требует внимания, и у каких товаров цены не обновлялись 14+ дней.',
+      architecture: [
+        {
+          path: 'parts/hot-deals.php',
+          desc: 'запрос майнеров, оценка по суточному доходу, выбор топ-4, утроение массива для CSS петли'
+        },
+        {
+          path: 'inc/tg-channel.php',
+          desc: 'обработчик REST webhook, парсер прайса, нормализатор, матчер слотов, отправка отчёта'
+        },
+        {
+          path: 'POST /wp-json/ms/v1/tg-webhook',
+          desc: 'принимает channel_post от Telegram, валидирует токен, маршрутизирует: прайс vs обычный пост'
+        },
+        {
+          path: 'GET /wp-json/ms/v1/tg-posts',
+          desc: 'возвращает 5 последних постов канала из transient, fallback - парсинг t.me/s/channel'
+        },
+        {
+          path: 'опция ms2026_pending_prices',
+          desc: 'хранит несовпавшие строки прайса - новые варианты хешрейта и неизвестные модели'
+        }
+      ]
+    }
   }
 ];
 
